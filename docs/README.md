@@ -1,4 +1,4 @@
 
 docs の中の README.md
 
-![gawga-botuアイコン](./images/gawga-botu.png)
+![gawga-botuアイコン](docs/images/gawga-botu.png)
