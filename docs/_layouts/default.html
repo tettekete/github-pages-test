@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="{{ page.lang | default: site.lang }}">
+<head>
+  <meta charset="utf-8">
+  <title>{{ page.title | default: site.title }}</title>
+  <!-- hreflang (各言語版のURLを相互に列挙) -->
+  <link rel="alternate" hreflang="ja" href="{{ '/ja/' | absolute_url }}">
+  <link rel="alternate" hreflang="en" href="{{ '/en/' | absolute_url }}">
+  <link rel="alternate" hreflang="x-default" href="{{ '/' | absolute_url }}">
+</head>
+<body>
+  {% include lang-switcher.html %}
+  {{ content }}
+</body>
+</html>
