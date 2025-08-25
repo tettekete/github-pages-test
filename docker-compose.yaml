@@ -1,33 +1,32 @@
-version: "3.8"
-
+# docker-compose.yml
 services:
   jekyll:
-    image: ruby:3.1-bullseye
-    container_name: jekyll-docs
+    build:
+      context: .
+      args:
+        PAGES_VERSION: "232"   # 必要に応じて更新
+    image: github-pages-test-jekyll:1.0
     working_dir: /site
-    environment:
-      BUNDLE_PATH: /usr/local/bundle
-      JEKYLL_ENV: development
-      # .git を見せない場合はどちらかでリポジトリ名を明示
-      # PAGES_REPO_NWO: owner/repo
     ports:
-      - "8080:4000"     # まずはプレーンに公開（127.0.0.1: を付けない）
+      - "4000:4000"
       - "35729:35729"
     volumes:
-      - ./docs:/site
-      - ./.git:/site/.git:ro   # .git を見せるなら PAGES_REPO_NWO は不要
-      - bundle:/usr/local/bundle
-    command: >
-      bash -lc "
-        gem install bundler &&
-        bundle install &&
-        bundle exec jekyll serve
-          --config _config.yml,_config.docker.yml
-          --source .
-          --host 0.0.0.0 --port 4000
-          --livereload --livereload-port 35729
-          --trace --verbose
-      "
-
-volumes:
-  bundle:
+      - ./docs:/site/docs
+      - ./.git:/site/.git:ro
+    environment:
+      JEKYLL_ENV: production   # 本番に近い挙動で確認
+      PAGES_REPO_NWO: "tettekete/github-pages-test"
+    # 通常は CMD に従って serve が起動
+    # build したいときだけ:
+    # command: ["build","--source","docs"]
+    command: [
+      "serve",
+      "--host","0.0.0.0",
+      "--port","4000",
+      "--safe",
+      "--livereload",
+      "--watch",
+      "--force_polling",
+      "--source","docs",
+      "--config","docs/_config.yml,docs/_config.local.yml"
+    ]
