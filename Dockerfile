@@ -1,10 +1,4 @@
-# FROM ruby:3.4.5
 FROM ruby:3.2-alpine
-
-# RUN apk add --no-cache build-base git nodejs
-
-# WORKDIR /root
-# ENV BUNDLE_PATH=/usr/local/bundle
 
 RUN apk add --no-cache build-base git nodejs tini
 
@@ -37,6 +31,3 @@ CMD [\
 	"--force_polling",\
 	"--source","docs"\
 	]
-
-# ENTRYPOINT [ "tail","-f","/dev/null" ]
-
