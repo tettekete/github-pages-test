@@ -1,0 +1,41 @@
+---
+---
+<!-- ↑フロントマター。jekyll(Liquid) によるテンプレーティングを機能させるためのおまじない -->
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Redirecting…</title>
+  {% include hreflang.html %}
+  <script>
+    (function() {
+      // 優先言語のリスト（例: ["ja", "en-US", "en"]）
+      const langs = navigator.languages && navigator.languages.length
+                    ? navigator.languages            // 標準的な優先リスト
+                    : [navigator.language];          // 後方互換（古いブラウザ用）
+
+      const siteUrl = "{{ site.baseurl }}";
+      let target = siteUrl + "/ja/"; // ひとまずデフォルトは日本語に
+
+      for (const lang of langs) {
+        if (lang.toLowerCase().startsWith("ja")) {
+          target = siteUrl + "/ja/";
+          break;
+        } else if (lang.toLowerCase().startsWith("en")) {
+          target = siteUrl + "/en/";
+          break;
+        }
+        // 他の言語を追加したい場合はここに else if を足す
+      }
+
+      // クライアントサイドでリダイレクト
+      window.location.replace(target);  // replace なのでヒストリバック出来無いリダイレクト
+    })();
+  </script>
+</head>
+<body>
+  <p>Redirecting… If not redirected, <a href="/en/">click here</a>.</p>
+  <p>ページが自動的に遷移しない場合は <a href="/ja/">こちら</a>。</p>
+</body>
+</html>
