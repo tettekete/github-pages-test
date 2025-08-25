@@ -222,18 +222,9 @@ lang: ja
 
 #### `docs/_config.yml`:
 
-各 HTML で URL を構築しやすい様に `url` と `baseurl` に URL 情報を設定しておきます。
-
 ```yaml
 theme: jekyll-theme-slate
-# GitHub Pages URL のスキーマ + ドメイン部分
-url: https://tettekete.github.io
-# GitHub Pages 上のルートパス部分
-baseurl: /github-pages-test/
 ```
-
-`domain` と `path` のような名前の方が適切に思えるが ChatGPT5 さんに聞いたところ jekyll の歴史的な事情で `url` と `baseurl` を使うのだそうな。
-
 
 #### `docs/_includes/hreflang.html`:
 
