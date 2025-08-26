@@ -19,6 +19,13 @@ __EOL__
 RUN bundle config set path "/usr/local/bundle" \
  && bundle install
 
+# .git から自動的に読み込まれて URL 構築に使われるパラメータを無効化するコンフィグファイル
+COPY <<__EOL__ _config.local.yml
+# _config.local.yml
+url: ""         # 127.0.0.1:4000 で見るときは空にする
+baseurl: ""     # ルート直下で配信させる（/ になる）
+__EOL__
+
 
 ENTRYPOINT ["/sbin/tini","-g","--","bundle","exec","jekyll"]
 CMD [\
@@ -29,5 +36,6 @@ CMD [\
 	"--livereload",\
 	"--watch",\
 	"--force_polling",\
-	"--source","docs"\
+	"--source","docs",\
+	"--config","docs/_config.yml,_config.local.yml"\
 	]

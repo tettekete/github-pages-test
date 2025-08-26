@@ -19,14 +19,15 @@ services:
     # 通常は CMD に従って serve が起動
     # build したいときだけ:
     # command: ["build","--source","docs"]
-    command: [
-      "serve",
-      "--host","0.0.0.0",
-      "--port","4000",
-      "--safe",
-      "--livereload",
-      "--watch",
-      "--force_polling",
-      "--source","docs",
-      "--config","docs/_config.yml,docs/_config.local.yml"
-    ]
+    # 起動オプションを弄りたい場合:
+    # command: [
+    #   "serve",
+    #   "--host","0.0.0.0",
+    #   "--port","4000",
+    #   "--safe",
+    #   "--livereload",
+    #   "--watch",
+    #   "--force_polling",
+    #   "--source","docs",
+    #   "--config","docs/_config.yml,_config.local.yml"
+    # ]
