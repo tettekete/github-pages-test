@@ -9,7 +9,7 @@ permalink: /ja/
 
 - [概要](#概要)
 	- [最終的なファイル構成](#最終的なファイル構成)
-	- [その前に - フロントマターについて](#その前に---フロントマターについて)
+- [その前に - フロントマターについて](#その前に---フロントマターについて)
 	- [なぜここでフロントマターの説明をするのか](#なぜここでフロントマターの説明をするのか)
 - [テーマの指定とカスタマイズ](#テーマの指定とカスタマイズ)
 	- [テーマの指定](#テーマの指定)
@@ -21,22 +21,22 @@ permalink: /ja/
 		- [各ページでのフロントマター](#各ページでのフロントマター)
 	- [`/index.html` で自動リダイレクトさせる](#indexhtml-で自動リダイレクトさせる)
 		- [`docs/_includes/hreflang.html`:](#docs_includeshreflanghtml)
-		- [`docs/index.html`](#docsindexhtml)
+		- [`docs/index.html`:](#docsindexhtml)
 	- [各ページに言語リンクを追加する](#各ページに言語リンクを追加する)
-		- [`docs/_data/i18n.yml`](#docs_datai18nyml)
+		- [`docs/_data/i18n.yml`:](#docs_datai18nyml)
 		- [`docs/_includes/lang-switcher.html`:](#docs_includeslang-switcherhtml)
-		- [`docs/_layouts/default.html`](#docs_layoutsdefaulthtml)
+		- [`docs/_layouts/default.html`:](#docs_layoutsdefaulthtml)
 - [Docker コンテナを使ったローカルテスト](#docker-コンテナを使ったローカルテスト)
-	- [その前に `docs/_config.local.yml`](#その前に-docs_configlocalyml)
 	- [Docker イメージのビルドと起動](#docker-イメージのビルドと起動)
 
 
 ## 概要
 
-GitHub Actions を使わずにデフォルト(jekyll)の方法でリポジトリの `docs/` 以下を GitHub Pages で公開するに当たり、以下の 2 点について説明します。
+GitHub Actions を使わずにデフォルト(jekyll)の方法でリポジトリの `docs/` 以下を GitHub Pages で公開するに当たり、以下の 2 点(+ 1点) について説明します。
 
 - テーマの指定およびカスタマイズ方法
 - 多言語対応方法（の内の一つ）
+- Docker コンテナを使ったローカルテスト - おまけ
 
 ### 最終的なファイル構成
 
@@ -65,7 +65,7 @@ docs/
 これらのファイルはすべて本リポジトリに格納されているので、実物を見たい場合はそちらを参照してください。
 
 
-### その前に - フロントマターについて
+## その前に - フロントマターについて
 
 **フロントマター**とは markdown の先頭に YAML 形式で書くメタ情報のことです。Obsidian で採用されているのが有名です。
 
@@ -103,7 +103,7 @@ lang: 日本語
 
 しかし、フロントマターが無い場合は `{{ lang }}` が展開されず、そのまま `{{ lang }}` と表示されます。
 
-つまり、フロントマターが付いていないファイルはテンプレートエンジンに渡されず、そのまま使われる仕組みになっています。
+つまり、**フロントマターが付いていないファイルはテンプレートエンジンに渡されず、そのまま使われる**仕組みになっています。
 
 ですが、テンプレートエンジンが埋め込むパラメータには jekyll が提供するグローバルなパラメータや、`_config.yaml` でサイト全体向けに定義したパラメータも含まれます。
 
@@ -162,7 +162,7 @@ theme: jekyll-theme-slate
 
 拡張子から分かるとおり、jekyll は Sass/SCSS を採用しているので修正したい属性値のみを書けばその属性値だけ上書きしてくれます。
 
-例えば `slate` のコンテンツブロック用のセレクタは以下のように定義されています。
+例えば `slate` のコンテンツブロック用のセレクタは以下のように[定義](https://github.com/pages-themes/slate/blob/f53ef839a3467668eec71a8314e8806e7bf703d5/_sass/jekyll-theme-slate.scss#L276-L281)されています。
 
 ```scss
 .inner {
@@ -209,8 +209,7 @@ jekyll そのものには多言語対応のための機能は含まれていな�
 
 ### `/ja/` ,`/en/` ディレクトリ
 
-特に難しいことはありません。  
-リポジトリの `docs/ja/`,`docs/en/` ディレクトリを作り、その直下に適当な `README.md` や他のファイルを置いておきます。
+特に難しいことはありません。リポジトリの `docs/ja/`,`docs/en/` ディレクトリを作り、その直下に適当な `README.md` や他のファイルを置いておきます。
 
 ただしフロントマターに `lang` で `ja` のページなのか `en` のページなのか設定しておく必要があります。これは後述する言語切り替え用のナビゲーション上のラベルを切り替えるのに使います。
 
@@ -251,7 +250,7 @@ title: Hello World
 <link rel="alternate" hreflang="x-default" href="{{ site.url }}{{ site.baseurl }}/">
 ```
 
-#### `docs/index.html`
+#### `docs/index.html`:
 
 ```html
 ---
@@ -297,11 +296,13 @@ title: Hello World
 </html>
 ```
 
+`{% include hreflang.html %}` の `include` は jekyll による Liquid の独自拡張で、`_includes/` にあるファイルを読み込んで挿入するものです。
+
 ### 各ページに言語リンクを追加する
 
 以下、見出しのファイルを作成してください。
 
-#### `docs/_data/i18n.yml`
+#### `docs/_data/i18n.yml`:
 
 任意でテンプレートに埋めこめるパラメータを定義しておく。
 
@@ -333,7 +334,7 @@ en:
 </nav>
 ```
 
-#### `docs/_layouts/default.html`
+#### `docs/_layouts/default.html`:
 
 これは採用したテンプレートやカスタマイズの仕方によってインサート箇所などが異なるため、基本的なインサート方法のみ示します。
 
@@ -359,16 +360,8 @@ en:
 
 これらを使えば簡単にローカルでの確認が行えます。
 
-### その前に `docs/_config.local.yml`
+Docker を使う利点はローカルをほとんど汚すこと無く実際の表示を確認出来る点です。
 
-ただし、そのまま動かすと jekyll が git の情報からリポジトリ名などを使ったパスを構築してしまい、ローカル環境と合わずにうまく表示できません。そのため、治具を噛ませる必要があります。
-
-それが `docs/_config.local.yml` というファイルで、中身は以下のようにしておきます。
-
-```yaml
-url: ""         # 127.0.0.1:4000 で見るときは空にします
-baseurl: ""     # ルート直下で配信させます（/ になる）
-```
 
 ### Docker イメージのビルドと起動
 
@@ -384,7 +377,7 @@ $ docker compose up
 # を実行します。
 ```
 
-これで http://127.0.0.1:4000 から `docs/` 以下のプレビューを確認することができます。
+これで http://127.0.0.1:4000 から `docs/` 以下のプレビューを確認することができるようになります。
 
 {% endraw %}
 
