@@ -27,3 +27,19 @@
 .inner {
   max-width: 768px;
 }
+
+/* デフォルト：見出しの前は大きめ余白 */
+h2 ,h3 {
+  margin-top: 2rem;
+}
+
+h4{
+  margin-top: 1.5rem;
+}
+
+/* ただし見出しが続く場合は小さめ余白 */
+h1 + h2,
+h2 + h3,
+h3 + h4 {
+  margin-top: 0.25rem;
+}
